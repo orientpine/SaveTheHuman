@@ -8,12 +8,33 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
+        <Style x:Key="EllipseStyle1" TargetType="Ellipse"/>
+        <Style x:Key="EllipseStyle2" TargetType="Ellipse"/>
         <ControlTemplate x:Key="EnemyTemplate" TargetType="ContentControl">
-            <Ellipse HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="100" Fill="Red"/>
+            <Grid HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="100">
+                <Ellipse HorizontalAlignment="Center" Height="100" Margin="0,0,0,0" VerticalAlignment="Center" Width="75" Fill="#FF2D83FF" Stroke="Black" StrokeThickness="10"/>
+                <Ellipse HorizontalAlignment="Left" Height="30" Margin="46,19,0,0" VerticalAlignment="Top" Width="50" Fill="Black" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto">
+                    <Ellipse.RenderTransform>
+                        <CompositeTransform Rotation="-60"/>
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+                <Ellipse HorizontalAlignment="Left" Height="30" Margin="6,19.5,0,0" VerticalAlignment="Top" Width="50" Fill="Black" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto">
+                    <Ellipse.RenderTransform>
+                        <CompositeTransform Rotation="60"/>
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+            </Grid>
         </ControlTemplate>
+        <DataTemplate x:Key="ContentControlContentTemplate1">
+            <Grid/>
+        </DataTemplate>
+        <ControlTemplate x:Key="ContentControlTemplate1" TargetType="ContentControl">
+            <Ellipse HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="100" Margin="0,0,0,0"/>
+        </ControlTemplate>
+        <ControlTemplate x:Key="ContentControlTemplate2" TargetType="ContentControl"/>
     </Page.Resources>
 
-    <Grid>
+    <Grid x:Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160"/>
             <ColumnDefinition/>
@@ -25,12 +46,12 @@
             <RowDefinition Height="160"/>
         </Grid.RowDefinitions>
         <Button x:Name="StartButton" Content="START!" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Height="31" Width="75" Click="StartButton_Click"/>
-        <ProgressBar Grid.Column="1" Grid.Row="2" Height="20" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" Margin="0,0,0,0">
+        <ProgressBar x:Name="progressBar" Grid.Column="1" Grid.Row="2" Height="20" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" Margin="0,0,0,0">
             <ProgressBar.RenderTransform>
                 <CompositeTransform ScaleY="-1"/>
             </ProgressBar.RenderTransform>
         </ProgressBar>
-        <Canvas x:Name="playArea" Grid.Row="1" Grid.ColumnSpan="3">
+        <Canvas x:Name="playArea" Grid.Row="1" Grid.ColumnSpan="3" PointerMoved="playArea_PointerMoved" PointerExited="playArea_PointerExited">
             <Canvas.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black"/>
@@ -43,11 +64,7 @@
                     <GradientStop Color="White" Offset="1"/>
                 </LinearGradientBrush>
             </Canvas.FocusVisualPrimaryBrush>
-            <StackPanel x:Name="human" HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center" Width="100" Height="198">
-                <Ellipse HorizontalAlignment="Center" Height="10" VerticalAlignment="Center" Width="10" Fill="White" Margin="0,0,0,0"/>
-                <Rectangle Height="25" Width="10" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="White" Margin="0,0,0,0"/>
-            </StackPanel>
-            <Rectangle x:Name="target" Height="100" Width="100" FocusVisualPrimaryBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" Canvas.Left="1005" Canvas.Top="470" UseLayoutRounding="False" d:LayoutRounding="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Rectangle x:Name="target" Height="50" Width="50" FocusVisualPrimaryBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" Canvas.Left="1005" Canvas.Top="470" UseLayoutRounding="False" d:LayoutRounding="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" PointerEntered="target_PointerEntered">
                 <Rectangle.RenderTransform>
                     <CompositeTransform Rotation="45"/>
                 </Rectangle.RenderTransform>
@@ -58,13 +75,16 @@
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
+            <TextBlock x:Name="GameOverText" HorizontalAlignment="Center" Text="GameOver" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="110" FontFamily="Arial Black" FontWeight="Bold" Canvas.Left="505" Canvas.Top="288"/>
+            <StackPanel x:Name="human" HorizontalAlignment="Left" Canvas.Left="45" Orientation="Vertical" VerticalAlignment="Top" Width="10" PointerPressed="human_PointerPressed">
+                <Ellipse HorizontalAlignment="Center" Height="10" VerticalAlignment="Center" Width="10" Fill="White"/>
+                <Rectangle Height="25" Width="10" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="White"/>
+            </StackPanel>
         </Canvas>
         <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="2" Margin="0,0,0,0">
             <TextBlock x:Name="textBlock" Text="Avoid This" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,0,0,0"/>
-
-            <ContentControl x:Name="EnemyTemplate" Template="{StaticResource EnemyTemplate}" Content="ContentControl" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <ContentControl ContentTemplate="{StaticResource ContentControlContentTemplate1}" x:Name="ContentsControl" HorizontalAlignment="Center" VerticalAlignment="Center" Template="{StaticResource EnemyTemplate}"/>
         </StackPanel>
-        <TextBlock x:Name="GameOverText" HorizontalAlignment="Center" Text="GameOver" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" FontSize="110" FontFamily="Arial Black" FontWeight="Bold" Width="542.8"/>
 
     </Grid>
 </Page>
