@@ -1,0 +1,7 @@
+﻿<Application
+    x:Class="Ver2_SaveTheHuman.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Ver2_SaveTheHuman">
+
+</Application>
